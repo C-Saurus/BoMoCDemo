@@ -17,8 +17,14 @@ import net.codejava.spring.dao.BookDAO;
 import net.codejava.spring.dao.BookDAOImpl;
 import net.codejava.spring.dao.CartDAO;
 import net.codejava.spring.dao.CartDAOImpl;
+import net.codejava.spring.dao.OrderDAO;
+import net.codejava.spring.dao.OrderDAOImpl;
 import net.codejava.spring.dao.ProductDAO;
 import net.codejava.spring.dao.ProductDAOImpl;
+import net.codejava.spring.dao.ShipDAO;
+import net.codejava.spring.dao.ShipDAOImpl;
+import net.codejava.spring.dao.ShipMethodDAO;
+import net.codejava.spring.dao.ShipMethodDAOImpl;
 import net.codejava.spring.dao.UserDAO;
 import net.codejava.spring.dao.UserDAOImpl;
 
@@ -73,5 +79,20 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter{
 	@Bean
 	public CartDAO getCartDAO() {
 		return new CartDAOImpl(getDataSource());
+	}
+	
+	@Bean
+	public ShipDAO getShipDAO() {
+		return new ShipDAOImpl(getDataSource());
+	}
+	
+	@Bean
+	public ShipMethodDAO getShipMethodDAO() {
+		return new ShipMethodDAOImpl(getDataSource());
+	}
+	
+	@Bean
+	public OrderDAO getOrderDAO() {
+		return new OrderDAOImpl(getDataSource());
 	}
 }

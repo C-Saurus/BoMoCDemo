@@ -10,4 +10,6 @@ public interface UserDAO {
 	public String register(User user);
 	
 	public User login(String email, String password);
+	
+	public String getAddressById(String user_id);
 }

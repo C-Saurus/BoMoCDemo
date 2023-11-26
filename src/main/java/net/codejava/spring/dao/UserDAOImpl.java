@@ -98,5 +98,24 @@ public class UserDAOImpl implements UserDAO{
 		});
 	}
 
+	@Override
+	public String getAddressById(final String user_id) {
+		String sql = "SELECT address FROM user WHERE user_id = ?";
+		return jdbcTemplate.query(sql, new PreparedStatementSetter() {
+		    @Override
+		    public void setValues(PreparedStatement ps) throws SQLException {
+		        ps.setString(1, user_id);
+		    }
+		}, new ResultSetExtractor<String>() {
+		    @Override
+		    public String extractData(ResultSet rs) throws SQLException, DataAccessException {
+		        if (rs.next()) {
+		            return rs.getString("address");
+		        }
+		        return null;
+		    }
+		});
+	}
+
 	
 }
