@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.codejava.spring.model.Cart;
 
@@ -43,12 +44,15 @@ public class CartDAOImpl implements CartDAO{
 	}
 
 	@Override
+	@Transactional
 	public String addToCart(String product_id, int quantity, float price, String customer_id) {
 		int res = checkExistProduct(product_id, customer_id);
 		if ( res > -1) {
 			String sql = "UPDATE cart SET quantity=? WHERE product_id=? AND customer_id = ?";
+			String sqlUpdateProduct = "UPDATE product SET quantity_in_stock = quantity_in_stock + ? where product_id = ?";
 			try {
 				jdbcTemplate.update(sql, quantity + res, product_id, customer_id);
+				jdbcTemplate.update(sqlUpdateProduct, 0-quantity, product_id);
 				return "Update success";
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -58,8 +62,10 @@ public class CartDAOImpl implements CartDAO{
 		}
 		else {
 			String sql = "INSERT INTO cart (product_id, quantity, price, customer_id) VALUES (?, ?, ?, ?)";
+			String sqlUpdateProduct = "UPDATE product SET quantity_in_stock = quantity_in_stock + ? where product_id = ?";
 			try {
 				jdbcTemplate.update(sql, product_id, quantity, price, customer_id);
+				jdbcTemplate.update(sqlUpdateProduct, 0-quantity, product_id);
 				return "Insert success";
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -70,10 +76,13 @@ public class CartDAOImpl implements CartDAO{
 	}
 
 	@Override
+	@Transactional
 	public String updateQuantity(String product_id, int quantity, String customer_id) {
 		String sql = "UPDATE cart SET quantity=? WHERE product_id=? AND customer_id = ?";
+		String sqlUpdateProduct = "UPDATE product SET quantity_in_stock = quantity_in_stock + ? where product_id = ?";
 		try {
 			jdbcTemplate.update(sql, quantity, product_id, customer_id);
+			jdbcTemplate.update(sqlUpdateProduct, 0-quantity, product_id);
 			return "Update success";
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -83,10 +92,13 @@ public class CartDAOImpl implements CartDAO{
 	}
 
 	@Override
-	public String remove(String product_id, String customer_id) {
+	@Transactional
+	public String remove(String product_id, String customer_id, int quantity) {
 		String sql = "DELETE FROM cart WHERE product_id=? AND customer_id=?";
+		String sqlUpdateProduct = "UPDATE product SET quantity_in_stock = quantity_in_stock + ? where product_id = ?";
 		try {
 			jdbcTemplate.update(sql, product_id, customer_id);
+			jdbcTemplate.update(sqlUpdateProduct, quantity, product_id);
 			return "Delete success";
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -97,7 +109,7 @@ public class CartDAOImpl implements CartDAO{
 
 	@Override
 	public List<Cart> getCartInfo(final String customer_id) {
-		String sql = "SELECT c1.cart_id, p1.product_id, p1.product_name, c1.quantity, c1.price FROM moboc.cart c1 left join moboc.product p1 on c1.product_id = p1.product_id where c1.customer_id = ?";
+		String sql = "SELECT c1.cart_id, p1.product_id, p1.product_name, c1.quantity, c1.price FROM moboc.cart c1 left join moboc.product p1 on c1.product_id = p1.product_id where c1.customer_id = ? AND c1.is_ordered = 0";
 		List<Cart> listProduct = jdbcTemplate.query(sql, new PreparedStatementSetter() {
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {

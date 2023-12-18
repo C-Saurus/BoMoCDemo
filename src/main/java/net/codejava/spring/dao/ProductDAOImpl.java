@@ -114,4 +114,30 @@ public class ProductDAOImpl implements ProductDAO {
 		return listProduct;
 	}
 
+	@Override
+	public String addProduct(Product product) {
+		if (product.getProduct_id() != null) {
+			String sql = "UPDATE product SET category_id = ?, description = ?, product_name = ?, price = ?, quantity_in_stock = ?, warranty_date = ?, release_date = ?, brand = ?, size = ?, author_name = ?, suitable_age = ?, memory_size = ?, screen_size = ?, pages = ? WHERE product_id=?";
+			try {
+				jdbcTemplate.update(sql, product.getCategory(), product.getDescription(), product.getProduct_name(),  product.getPrice(), product.getQuantity_in_stock(), product.getWarranty_date(), product.getRelease_date(), product.getBrand(), product.getSize(), product.getAuthor_name(), product.getSuitable_age(), product.getMemory_size(), product.getScreen_size(), product.getPages(), product.getProduct_id());
+				return "Update success";
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				return null;
+			}	
+		}
+		else {
+			String sql = "INSERT INTO product (category_id, description, product_name, price, quantity_in_stock, warranty_date, release_date, brand, size, author_name, suitable_age, memory_size, screen_size, pages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			try {
+				jdbcTemplate.update(sql, product.getCategory(), product.getDescription(), product.getProduct_name(),  product.getPrice(), product.getQuantity_in_stock(), product.getWarranty_date(), product.getRelease_date(), product.getBrand(), product.getSize(), product.getAuthor_name(), product.getSuitable_age(), product.getMemory_size(), product.getScreen_size(), product.getPages(), product.getProduct_id());
+				return "Add success";
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				return null;
+			}	
+		}
+	}
+
 }

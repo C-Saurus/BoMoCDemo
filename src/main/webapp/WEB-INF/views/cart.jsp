@@ -40,7 +40,7 @@
                         <a href="/BoMoCDemo/detail/${cart.product_id}">Detail</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <button class="btn btn-warning" onClick="updateQuantity(`${status.index+1}`, `${cart.product_id}`)">Update quantity</button>
-                        <button class="btn btn-danger" onClick="removeCart(`${cart.product_id}`)">Remove</button>
+                        <button class="btn btn-danger" onClick="removeCart(`${cart.product_id}`, ${cart.quantity})">Remove</button>
                     </td>
                              
                 </tr>
@@ -54,7 +54,7 @@
 					<a href="/BoMoCDemo/" class="text-white">Back</a>
 				</button>
 				<button class="btn btn-success">
-					<a href="/BoMoCDemo/" class="text-white">Add Order</a>
+					<a href="/BoMoCDemo/ship/create" class="text-white">Add Order</a>
 				</button>
             </div>
         </div>
@@ -62,12 +62,12 @@
     </body>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-    	function removeCart(id) {
+    	function removeCart(id, quantity) {
 			//const id = document.getElementById("id").value;
 			// Hiển thị popup confirm
 			var confirmed = confirm("Bạn có muốn thêm xóa sản phẩm khỏi giỏ hàng?");
 			if (confirmed) {
-				var url = "/BoMoCDemo/removeCart/" + id;
+				var url = "/BoMoCDemo/removeCart/" + id + "/" + quantity;
 		        var xhr = new XMLHttpRequest();
 			    xhr.open("POST", url, true);
 			    xhr.onreadystatechange = function() {

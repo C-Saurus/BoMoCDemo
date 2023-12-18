@@ -13,21 +13,21 @@ public class Product {
 	private int vote;
 	private int feedback_id;
 	private int material_id;
-	private Date warranty_date;
+	private String warranty_date;
 	private String brand ;
 	private String size ;
 	private String suitable_age;
 	private float memory_size;
 	private float screen_size;
-	private Date release_date;
+	private String release_date;
 	private String author_name; 
 	private int pages;
 	
 	public Product() {}
 
 	public Product(String product_id, String category, String product_name, String thumbnail, int quantity_in_stock,
-			String description, float price, int vote, int feedback_id, int material_id, Date warranty_date,
-			String brand, String size, String suitable_age, float memory_size, float screen_size, Date release_date,
+			String description, float price, int vote, int feedback_id, int material_id, String warranty_date,
+			String brand, String size, String suitable_age, float memory_size, float screen_size, String release_date,
 			String author_name, int pages) {
 		super();
 		this.product_id = product_id;
@@ -123,11 +123,11 @@ public class Product {
 		this.material_id = material_id;
 	}
 
-	public Date getWarranty_date() {
+	public String getWarranty_date() {
 		return warranty_date;
 	}
 
-	public void setWarranty_date(Date warranty_date) {
+	public void setWarranty_date(String warranty_date) {
 		this.warranty_date = warranty_date;
 	}
 
@@ -171,11 +171,11 @@ public class Product {
 		this.screen_size = screen_size;
 	}
 
-	public Date getRelease_date() {
+	public String getRelease_date() {
 		return release_date;
 	}
 
-	public void setRelease_date(Date release_date) {
+	public void setRelease_date(String release_date) {
 		this.release_date = release_date;
 	}
 

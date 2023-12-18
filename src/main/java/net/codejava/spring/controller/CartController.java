@@ -73,14 +73,14 @@ public class CartController {
 	}
 	
 
-	@RequestMapping(value="/removeCart/{id}", method = RequestMethod.POST)
-	public String removeCart(@PathVariable String id, HttpServletRequest request) {
+	@RequestMapping(value="/removeCart/{id}/{quantity}", method = RequestMethod.POST)
+	public String removeCart(@PathVariable String id, @PathVariable int quantity, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String user_id = (String) session.getAttribute("user_id");
 		if (user_id == null) {
 			return "redirect:/login";
 		}
-		String res = cartDAO.remove(id, user_id);
+		String res = cartDAO.remove(id, user_id, quantity);
 		if (res == null) {
 			return "error";
 		}

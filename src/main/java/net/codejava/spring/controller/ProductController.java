@@ -28,11 +28,13 @@ public class ProductController {
 	public String listProduct(Model model, HttpServletRequest request) throws IOException{
 		HttpSession session = request.getSession();
 		String user_id = (String) session.getAttribute("user_id");
+		int role = (int) session.getAttribute("role");
 		if (user_id == null) {
 			return "redirect:/login?error=1";
 		}
 		List<Product> listProduct = productDAO.getList();
 		model.addAttribute("listProduct", listProduct);
+		model.addAttribute("role", role);
 		return "home";
 	}
 	
@@ -48,5 +50,24 @@ public class ProductController {
 		Product product = productDAO.getDetail(id);
 		model.addAttribute("product", product);
 		return "detail";
+	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public String addProductForm() {
+		return "addproduct";
+	}
+	
+	@RequestMapping(value = "/add/{type}", method = RequestMethod.GET)
+	public String addProduct(@PathVariable String type, Model model) {
+		if (type == "book") {
+			
+		}
+		else if (type == "clothes") {
+			
+		}
+		else if (type == "mobile") {
+			
+		}
+		return "error";
 	}
 }

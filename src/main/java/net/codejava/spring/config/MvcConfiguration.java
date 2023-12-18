@@ -5,20 +5,23 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-import net.codejava.spring.dao.BookDAO;
-import net.codejava.spring.dao.BookDAOImpl;
 import net.codejava.spring.dao.CartDAO;
 import net.codejava.spring.dao.CartDAOImpl;
 import net.codejava.spring.dao.OrderDAO;
 import net.codejava.spring.dao.OrderDAOImpl;
+import net.codejava.spring.dao.PayDAO;
+import net.codejava.spring.dao.PayDAOImpl;
+import net.codejava.spring.dao.PayMethodDAO;
+import net.codejava.spring.dao.PayMethodDAOImpl;
 import net.codejava.spring.dao.ProductDAO;
 import net.codejava.spring.dao.ProductDAOImpl;
 import net.codejava.spring.dao.ShipDAO;
@@ -31,6 +34,7 @@ import net.codejava.spring.dao.UserDAOImpl;
 @Configuration
 @ComponentScan(basePackages="net.codejava.spring")
 @EnableWebMvc
+@EnableTransactionManagement
 public class MvcConfiguration extends WebMvcConfigurerAdapter{
 //	@Override
 //	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) { 
@@ -62,9 +66,9 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter{
 	}
 	
 	@Bean
-	public BookDAO getContactDAO() {
-		return new BookDAOImpl(getDataSource());
-	}
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(getDataSource());
+    }
 	
 	@Bean
 	public UserDAO getUserDAO() {
@@ -94,5 +98,15 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter{
 	@Bean
 	public OrderDAO getOrderDAO() {
 		return new OrderDAOImpl(getDataSource());
+	}
+	
+	@Bean
+	public PayMethodDAO getPayMethodDAO() {
+		return new PayMethodDAOImpl(getDataSource());
+	}
+	
+	@Bean
+	public PayDAO getPayDAO() {
+		return new PayDAOImpl(getDataSource());
 	}
 }
